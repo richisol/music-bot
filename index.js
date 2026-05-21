@@ -13,7 +13,8 @@ const ARTIST_IDS = [
   '0GM7qgcRCORpGnfcN2tCiB', // Tainy
   '4q3ewBCX7sLwd24euuV69X', // Bad Bunny
   '3qiHUAX7zY4Qnjx8TNUzVx', // Yeat
-  '0EyhkwP3UnwGFBy6xwKjSy', //EsDeeKid
+  '0EyhkwP3UnwGFBy6xwKjSy', // EsDeeKid
+  '4QM5QCHicznALtX885CnZC', // Central Cee
 ];
 
 const RELEASE_TYPES = ['album', 'single', 'compilation'];
@@ -46,32 +47,36 @@ async function getArtistName(token, artistId) {
   return data.name || artistId;
 }
 
-async function announce(release, artistName) {
-  const typeLabel = { album: '💿 Album', single: '🎵 Single', compilation: '📀 EP / Compilation' };
-  const label = typeLabel[release.album_type] || '🎵 Release';
-  const image = release.images?.[0]?.url;
+async function announceAll(newReleases) {
+  if (newReleases.length === 0) return;
 
-  const embed = {
-    title: release.name,
-    url: release.external_urls?.spotify,
-    description: `New ${label.toLowerCase()} by **${artistName}**`,
-    color: 0x1DB954,
-    thumbnail: image ? { url: image } : undefined,
-    fields: [
-      { name: 'Type', value: label, inline: true },
-      { name: 'Release date', value: release.release_date, inline: true },
-      { name: 'Tracks', value: String(release.total_tracks), inline: true }
-    ],
-    footer: { text: 'Music Release Bot • Spotify' }
-  };
+  const embeds = newReleases.slice(0, 10).map(({ release, artistName }) => {
+    const typeLabel = { album: '💿 Album', single: '🎵 Single', compilation: '📀 EP / Compilation' };
+    const label = typeLabel[release.album_type] || '🎵 Release';
+    const image = release.images?.[0]?.url;
+
+    return {
+      title: release.name,
+      url: release.external_urls?.spotify,
+      description: `New ${label.toLowerCase()} by **${artistName}**`,
+      color: 0x1DB954,
+      thumbnail: image ? { url: image } : undefined,
+      fields: [
+        { name: 'Type', value: label, inline: true },
+        { name: 'Release date', value: release.release_date, inline: true },
+        { name: 'Tracks', value: String(release.total_tracks), inline: true }
+      ],
+      footer: { text: 'Music Release Bot • Spotify' }
+    };
+  });
 
   await fetch(DISCORD_WEBHOOK, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ embeds: [embed] })
+    body: JSON.stringify({ embeds })
   });
 
-  console.log(`Announced: ${artistName} — ${release.name}`);
+  console.log(`Announced ${embeds.length} release(s) in one message.`);
 }
 
 function loadSeen() {
@@ -87,6 +92,7 @@ async function run() {
   console.log(`[${new Date().toISOString()}] Checking for new releases...`);
   const seen = loadSeen();
   const token = await getSpotifyToken();
+  const newReleases = [];
 
   for (const artistId of ARTIST_IDS) {
     const artistName = await getArtistName(token, artistId);
@@ -95,10 +101,15 @@ async function run() {
     for (const release of releases) {
       if (!seen.has(release.id)) {
         seen.add(release.id);
-        await announce(release, artistName);
-        await new Promise(r => setTimeout(r, 1000));
+        newReleases.push({ release, artistName });
       }
     }
+  }
+
+  // Discord allows max 10 embeds per message — batch if needed
+  for (let i = 0; i < newReleases.length; i += 10) {
+    await announceAll(newReleases.slice(i, i + 10));
+    if (i + 10 < newReleases.length) await new Promise(r => setTimeout(r, 1000));
   }
 
   saveSeen(seen);
