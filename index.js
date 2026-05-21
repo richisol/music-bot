@@ -12,7 +12,7 @@ const ARTIST_IDS = [
   '0Y5tJX1MQlPlqiwlOH1tJY', // Travis Scott
   '0GM7qgcRCORpGnfcN2tCiB', // Tainy
   '4q3ewBCX7sLwd24euuV69X', // Bad Bunny
-  '3qiHUAX7zY4Qnjx8TNUzVx'. // Yeat
+  '3qiHUAX7zY4Qnjx8TNUzVx', // Yeat
   '0EyhkwP3UnwGFBy6xwKjSy', //EsDeeKid
 ];
 
