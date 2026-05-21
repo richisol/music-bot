@@ -11,6 +11,8 @@ env:
 jobs:
   check:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repo
@@ -20,13 +22,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Restore seen releases cache
-        uses: actions/cache@v4
-        with:
-          path: seen_releases.json
-          key: seen-releases-${{ github.run_id }}
-          restore-keys: seen-releases-
 
       - name: Install dependencies
         run: npm install
@@ -38,8 +33,10 @@ jobs:
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
         run: node index.js
 
-      - name: Save seen releases cache
-        uses: actions/cache/save@v4
-        with:
-          path: seen_releases.json
-          key: seen-releases-${{ github.run_id }}
+      - name: Save seen releases
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add seen_releases.json
+          git diff --staged --quiet || git commit -m "chore: update seen releases"
+          git push
