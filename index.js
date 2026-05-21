@@ -6,7 +6,14 @@ const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const SPOTIFY_CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
 
 const ARTIST_IDS = [
-  '4QM5QCHicznALtX885CnZC', // Central Cee
+  '699OTQXzgjhIYAHMy9RyPD', // Playboi Carti
+  '504cl42JQLRqlZddfZ3S4z', // Cezinando
+  '4Gso3d4CscCijv0lmajZWs', // Don Toliver
+  '0Y5tJX1MQlPlqiwlOH1tJY', // Travis Scott
+  '0GM7qgcRCORpGnfcN2tCiB', // Tainy
+  '4q3ewBCX7sLwd24euuV69X', // Bad Bunny
+  '3qiHUAX7zY4Qnjx8TNUzVx'. // Yeat
+  '0EyhkwP3UnwGFBy6xwKjSy', //EsDeeKid
 ];
 
 const RELEASE_TYPES = ['album', 'single', 'compilation'];
