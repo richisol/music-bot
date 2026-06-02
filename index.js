@@ -15,6 +15,16 @@ const ARTIST_IDS = [
   '3qiHUAX7zY4Qnjx8TNUzVx', // Yeat
   '0EyhkwP3UnwGFBy6xwKjSy', // EsDeeKid
   '4QM5QCHicznALtX885CnZC', // Central Cee
+  '1VPmR4DJC1PlOtd0IADAO0', // SuicideBoys
+  '4V8LLVI7PbaPR0K2TGSxFF', // Tyler, the Creator
+  '13ubrt8QOOCPljQ2FL1Kca', // Asap Rocky
+  '7KjsjftPKKarTvZlawniPi', // Marstein
+  '35j3Bv3gRKUHbiFSxVjjIf', // Stig Brenner
+  '68kEuyFKyqrdQQLLsmiatm', // Vince Staples
+  '3zmfs9cQwzJl575W1ZYXeT', // Men I Trust
+  '3uwAm6vQy7kWPS2bciKWx9', // girl in red
+  '12Chz98pHFMPJEknJQMWvI', // Muse
+  '25uiPmTg16RbhZWAqwLBy5', // Charli xcx
 ];
 
 const RELEASE_TYPES = ['album', 'single', 'compilation'];
